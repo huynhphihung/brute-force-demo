@@ -2,6 +2,7 @@ import { useAuthStore } from "../stores/auth.store";
 
 const Login = () => {
   const { login } = useAuthStore();
+
   const handleLogin = (e) => {
     e.preventDefault();
     // Handle login logic here
