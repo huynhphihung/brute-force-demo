@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "build": "npm install --prefix server && npm install --prefix client && cd client && npx vite build",
+    "build": "npm install --prefix server && npm install --include=dev --prefix client && cd client && npx vite build",
     "start": "npm run start --prefix server"
   },
   "keywords": [],
