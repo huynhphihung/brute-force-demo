@@ -5,31 +5,32 @@ export const useAuthStore = create((set) => ({
   user: null,
   isCheckingAuth: false,
   isLogin: false,
+  isSignup: false,
   login: async (userData) => {
     set({ isLogin: true });
     const res = await axiosInstance.post("/auth/login", userData);
     if (res.status === 200) {
+      console.log(res.data);
+
       set({ user: res.data.user });
     }
     set({ isLogin: false });
   },
   signup: async (userData) => {
-    console.log(userData);
-
-    set({ isLogin: true });
+    set({ isSignup: true });
     const res = await axiosInstance.post("/auth/signup", userData);
     if (res.status === 200) {
+      console.log(res.data);
+
       set({ user: res.data.user });
     }
-    set({ isLogin: false });
+    set({ isSignup: false });
   },
   signout: async () => {
-    set({ isLogin: true });
     const res = await axiosInstance.post("/auth/logout");
     if (res.status === 200) {
       set({ user: null });
     }
-    set({ isLogin: false });
   },
   checkAuth: async () => {
     set({ isCheckingAuth: true });

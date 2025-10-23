@@ -68,7 +68,7 @@ export const login = async (req, res) => {
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
-    if (!isPasswordValid && !user) {
+    if (!isPasswordValid) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
@@ -95,18 +95,5 @@ export const signOut = async (req, res) => {
   } catch (error) {
     console.error("Sign-out error:", error);
     res.status(500).json({ message: "Internal server error" });
-  }
-};
-
-export const checkAuth = async (req, res) => {
-  try {
-    const token = req.cookies.token;
-    if (!token) return res.json({ success: false });
-
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await User.findById(decoded.id);
-    res.json({ success: true, user });
-  } catch {
-    res.json({ success: false });
   }
 };
