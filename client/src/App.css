@@ -87,3 +87,9 @@
 .login-form button:hover {
   background-color: #0056b3;
 }
+
+.error {
+  color: red;
+  margin: 10px 0;
+  text-align: center;
+}

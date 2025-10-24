@@ -18,7 +18,6 @@ const accessToken = (userId, res) => {
 export const signup = async (req, res) => {
   try {
     const { username, password } = req.body;
-    console.log(username, password);
     if (!username || !password) {
       return res
         .status(400)
@@ -52,7 +51,6 @@ export const signup = async (req, res) => {
 export const login = async (req, res) => {
   try {
     const { username, password } = req.body;
-    console.log(username, password);
 
     if (!username || !password) {
       return res
@@ -63,13 +61,13 @@ export const login = async (req, res) => {
     const user = await AuthModel.findOne({ username });
 
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(401).json({ message: "Invalid user or credentials" });
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
-    if (!isPasswordValid) {
-      return res.status(401).json({ message: "Invalid credentials" });
+    if (!user || !isPasswordValid) {
+      return res.status(401).json({ message: "Invalid user or credentials" });
     }
 
     accessToken(user._id, res);
@@ -94,6 +92,20 @@ export const signOut = async (req, res) => {
     return res.status(200).json({ message: "Sign-out successful" });
   } catch (error) {
     console.error("Sign-out error:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const checkAuth = async (req, res) => {
+  try {
+    const user = req.user;
+    if (!user) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    return res.status(200).json({ user });
+  } catch (error) {
+    console.error("Check auth error:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 };

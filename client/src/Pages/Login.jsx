@@ -1,7 +1,7 @@
 import { useAuthStore } from "../stores/auth.store";
 
 const Login = () => {
-  const { login } = useAuthStore();
+  const { login, message } = useAuthStore();
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -24,7 +24,8 @@ const Login = () => {
           <label htmlFor="password">Password:</label>
           <input type="password" id="password" name="password" required />
         </div>
-        <button type="submit">Sign Up</button>
+        <div className="error">{message && <p>{message}</p>}</div>
+        <button type="submit">Log In</button>
       </form>
     </div>
   );

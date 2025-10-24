@@ -3,28 +3,38 @@ import { axiosInstance } from "../utils/axios";
 
 export const useAuthStore = create((set) => ({
   user: null,
+  message: null,
   isCheckingAuth: false,
   isLogin: false,
   isSignup: false,
   login: async (userData) => {
     set({ isLogin: true });
-    const res = await axiosInstance.post("/auth/login", userData);
-    if (res.status === 200) {
-      console.log(res.data);
-
-      set({ user: res.data.user });
+    try {
+      const res = await axiosInstance.post("/auth/login", userData);
+      if (res.status === 200) {
+        set({ user: res.data.user });
+      }
+      set({ isLogin: false });
+    } catch (error) {
+      const errorMessage = error.response?.data?.message || "Login failed";
+      set({ message: errorMessage });
+    } finally {
+      set({ isLogin: false });
     }
-    set({ isLogin: false });
   },
   signup: async (userData) => {
     set({ isSignup: true });
-    const res = await axiosInstance.post("/auth/signup", userData);
-    if (res.status === 200) {
-      console.log(res.data);
-
-      set({ user: res.data.user });
+    try {
+      const res = await axiosInstance.post("/auth/signup", userData);
+      if (res.status === 200) {
+        set({ user: res.data.user });
+      }
+    } catch (error) {
+      const errorMessage = error.response?.data?.message || "Signup failed";
+      set({ message: errorMessage });
+    } finally {
+      set({ isSignup: false });
     }
-    set({ isSignup: false });
   },
   signout: async () => {
     const res = await axiosInstance.post("/auth/logout");
